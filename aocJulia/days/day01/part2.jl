@@ -5,7 +5,7 @@ using aocJulia: helpers
 
 
 function compute(s)
-    elfs = Vector{Int}()
+    elfs = []
     for elf in split(s, "\n\n")
         calories = @pipe elf |> chomp |> split .|> parse(Int, _) |> sum
         append!(elfs, calories)
