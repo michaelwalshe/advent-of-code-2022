@@ -1,0 +1,8 @@
+name = "aocJulia"
+uuid = "c9d86cd9-7e70-45dd-b62b-d13b2369d84f"
+authors = ["Michael Walshe <michael.walshe@amadeus.co.uk>"]
+version = "0.1.0"
+
+[deps]
+HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
