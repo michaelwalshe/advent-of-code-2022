@@ -48,17 +48,21 @@ proc sort data=out;
     by descending elf;
 run;
 
-data part1;
-    set out(obs=1);
+data part2;
+    keep res;
+    set out(obs=3) end=eof;
+    res + elf;
+    if eof then output;
 run;
 
-%get(part1, elf, result);
+%* Assign first value from dataset to mvar result;
+%get(part2, res, result);
 %mend compute;
 
 
 * Test on small input;
 %compute(input_s);
-%assert(iftrue=&result.=24000);
+%assert(iftrue=&result.=45000);
 
 * Compute full result;
 %compute(input);

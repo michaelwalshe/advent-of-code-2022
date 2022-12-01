@@ -11,19 +11,24 @@ data input_s;
     infile datalines dsd;
     input x;
     datalines;
-1000
-2000
-3000
-
-4000
-
-5000
-6000
-
-7000
-8000
-9000
-
-10000
+....
 ;
 run;
+
+
+%macro compute(input);
+data out;
+    set &input.;
+run;
+
+%get(part1, res, result);
+%mend compute;
+
+
+* Test on small input;
+%compute(input_s);
+%assert(iftrue=&result.=24000);
+
+* Compute full result;
+%compute(input);
+%put &=result.;
