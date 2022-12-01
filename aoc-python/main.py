@@ -1,3 +1,3 @@
-from support.support import create_day
+import support
 
-create_day(2)
+support.create_day(1)

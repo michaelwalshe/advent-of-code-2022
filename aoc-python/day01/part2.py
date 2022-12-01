@@ -5,21 +5,16 @@ import os.path
 
 import pytest
 
-from support import support
+import support
+
 
 INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.txt')
 
 
 def compute(s: str) -> int:
     elf_calories = []
-    elf_cal = 0
-    for line in s.splitlines():
-        if line == "":
-            elf_calories.append(elf_cal)
-            elf_cal = 0
-        else:
-            elf_cal += int(line)
-    elf_calories.append(elf_cal)
+    for elf in s.split("\n\n"):
+        elf_calories.append(sum(int(c) for c in elf.splitlines()))
     return sum(sorted(elf_calories, reverse=True)[:3])
 
 
