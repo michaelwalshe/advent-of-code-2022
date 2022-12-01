@@ -14,7 +14,8 @@ end
 
 
 
-INPUTS_S = """1000
+INPUTS_S = """
+1000
 2000
 3000
 
@@ -33,6 +34,6 @@ EXPECTED = 24000
 
 @test compute(INPUTS_S) == EXPECTED
 
-INPUT_TXT = INPUT_TXT = helpers.read_input(dirname(Base.source_path()))
+INPUT_TXT = helpers.read_input(dirname(Base.source_path()))
 
 println(compute(INPUT_TXT))
