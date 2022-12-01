@@ -5,20 +5,15 @@ import os.path
 
 import pytest
 
-import support
+from support import support
 
 INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.txt')
 
 
 def compute(s: str) -> int:
     elf_calories = []
-    elf_cal = 0
-    for line in s.splitlines():
-        if line == "":
-            elf_calories.append(elf_cal)
-            elf_cal = 0
-        else:
-            elf_cal += int(line)
+    for elf in s.split("\n\n"):
+        elf_calories.append(sum(int(c) for c in elf.splitlines()))
     return max(elf_calories)
 
 

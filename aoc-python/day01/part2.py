@@ -5,7 +5,7 @@ import os.path
 
 import pytest
 
-import support
+from support import support
 
 INPUT_TXT = os.path.join(os.path.dirname(__file__), 'input.txt')
 

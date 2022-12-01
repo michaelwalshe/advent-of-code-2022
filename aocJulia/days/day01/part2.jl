@@ -1,3 +1,4 @@
+using Pipe
 using Test
 
 using aocJulia: helpers
@@ -5,14 +6,9 @@ using aocJulia: helpers
 
 function compute(s)
     elfs = Vector{Int}()
-    elf = Vector{Int}()
-    for line in split(s, "\n")
-        if line != ""
-            append!(elf, parse(Int, line))
-        else
-            append!(elfs, sum(elf))
-            elf = Vector{Int}()
-        end
+    for elf in split(s, "\n\n")
+        calories = @pipe elf |> chomp |> split .|> parse(Int, _) |> sum
+        append!(elfs, calories)
     end
     return sort(elfs, rev=true)[1:3] |> sum
 end

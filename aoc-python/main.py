@@ -1,5 +1,3 @@
-import support
+from support.support import create_day
 
-YEAR = 2022
-
-support.create_day(2)
+create_day(2)
