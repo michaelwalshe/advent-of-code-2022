@@ -14,6 +14,7 @@ from pathlib import Path
 from typing import Generator
 
 HERE = Path(os.path.dirname(os.path.abspath(__file__)))
+ROOT = HERE.parent
 
 YEAR = 2022
 
@@ -79,12 +80,12 @@ def download_input(day, daypath) -> int:
 def create_day(day):
     day_name = f"day{str(day).zfill(2)}"
 
-    if Path(HERE / day_name).exists():
+    if Path(ROOT / day_name).exists():
         raise ValueError(f"Directory for day {day_name} already exists")
     
-    copy_tree(str(HERE / "day00"), str(HERE / day_name))
+    copy_tree(str(ROOT / "day00"), str(ROOT / day_name))
 
-    download_input(day, HERE / day_name)
+    download_input(day, ROOT / day_name)
 
 
 def adjacent_4(x: int, y: int) -> Generator[tuple[int, int], None, None]:
