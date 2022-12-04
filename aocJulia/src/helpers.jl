@@ -31,6 +31,8 @@ function create_day(day)
     )
 
     write(joinpath(ROOT, "days", day_name, "input.txt"), get_input(day))
+
+    return nothing
 end
 
 
