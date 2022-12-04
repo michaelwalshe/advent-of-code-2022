@@ -4,6 +4,7 @@ authors = ["Michael Walshe <michael.walshe@amadeus.co.uk>"]
 version = "0.1.0"
 
 [deps]
+Chain = "8be319e6-bccf-4806-a6f7-6fae938471bc"
 HTTP = "cd3eb016-35fb-5094-929b-558a96fad6f3"
 Pipe = "b98c9c47-44ae-5843-9183-064241ee97a0"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
