@@ -29,7 +29,7 @@
         %put NOTE: Test Passed;
     %end;
     %else %do;
-        %put %str(E)RROR: Test Failed;
+        %put %str(E)RROR: Test Failed - &=iftrue;
         %abort;
     %end;
 %mend assert;

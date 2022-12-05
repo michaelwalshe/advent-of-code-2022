@@ -14,4 +14,4 @@ options mautosource
 	    fmtsearch=(shared)
 	    msglevel=i;
 
-%create_day(2022, 1);
+%create_day(2022, 4);
