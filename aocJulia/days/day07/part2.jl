@@ -68,7 +68,7 @@ end
 
 
 # Add a child to a directory
-function add_child!(dir, child::Union{Directory, File})
+function add_child!(dir, child)
     child.parent = dir.id
     push!(dir.children, child)
 end
@@ -112,7 +112,7 @@ function compute(s)
     commands = []
     outputs = []
     output = []
-    # First, strip out all commands an their respective outputs
+    # First, strip out all commands and their respective outputs
     for line in split(chomp(s), "\n")
         # If command, push previous output
         if startswith(line, raw"$")
