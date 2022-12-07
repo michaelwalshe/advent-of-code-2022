@@ -20,7 +20,7 @@ File(name, size) = File(name, size, nothing)
 
 mutable struct Directory
     name
-    children::Vector{Any}
+    children
     parent
     id
     function Directory(name, children, parent)
