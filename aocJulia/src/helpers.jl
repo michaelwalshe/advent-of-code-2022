@@ -40,4 +40,25 @@ function read_input(fpath)
     read(joinpath(fpath, "input.txt"), String)
 end
 
+
+function format_hash_coords(coords)
+    min_x = minimum(p -> p[1], coords)
+    max_x = maximum(p -> p[1], coords)
+    min_y = minimum(p -> p[2], coords)
+    max_y = maximum(p -> p[2], coords)
+
+    g = ""
+    for y in min_y:(max_y+1)
+        for x in min_x:(max_x+1)
+            if (x, y) in coords
+                g *= "#"
+            else
+                g *= "."
+            end
+        end
+        g *= "\n"
+    end
+    return g
+end
+
 end

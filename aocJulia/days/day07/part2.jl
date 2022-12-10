@@ -98,7 +98,7 @@ function get_child_dir(dir, id::Number)
 end
 
 
-# Get a file by the name, only checks direct children
+# Get a child dir by the name, only checks direct children
 function get_child_dir(dir, name::String)
     for child in dir.children
         if isa(child, Directory) && child.name == name
