@@ -73,6 +73,7 @@ D 1
 L 5
 R 2
 """
+EXPECTED1 = 1
 
 INPUTS_S = """R 5
 U 8
@@ -85,7 +86,7 @@ U 20
 """
 EXPECTED = 36
 
-
+@test compute(INPUTS_S1) == EXPECTED1
 @test compute(INPUTS_S) == EXPECTED
 
 INPUT_TXT = helpers.read_input(dirname(Base.source_path()))
