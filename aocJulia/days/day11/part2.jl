@@ -45,7 +45,6 @@ function extract_monkeys(input)
 end
 
 
-
 function compute(s)
     monkeys = extract_monkeys(s)
 

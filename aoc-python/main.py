@@ -1,3 +1,3 @@
 import support
 
-support.create_day(10)
+support.create_day(12)
