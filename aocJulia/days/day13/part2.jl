@@ -2,10 +2,12 @@ using Chain, Test
 
 using aocJulia: helpers
 
+
 function get(x, i)
     checkbounds(Bool, x, i) && return x[i]
     return nothing
 end
+
 
 function compare(l::Number, r::Number)
     l < r && return true
@@ -25,6 +27,9 @@ end
 
 
 function compare(l::Vector, r::Vector)
+    # compare([], []) case - never occurs?
+    all(isempty.((l, r))) && return true
+
     for i in 1:max(length(l), length(r))
         # Get next values of list
         ri = get(r, i)
@@ -42,21 +47,18 @@ end
 
 
 function compute(s)
-    divider_packets = ([[2]], [[6]])
-
     # Evaluate all nested lists
     packets = @chain s begin
-         chomp
-         replace("\n\n" => "\n")
-         split("\n")
-         Meta.parse.(_)
-         eval.(_)
+        chomp
+        replace("\n\n" => "\n")
+        split("\n")
+        Meta.parse.(_)
+        eval.(_)
     end
     
     # Add dividors to package
-    for d in divider_packets
-        push!(packets, d)
-    end
+    divider_packets = ([[2]], [[6]])
+    push!(packets, divider_packets...)
 
     # Sort, using compare() to return if l < r
     sort!(packets, lt=compare)
