@@ -43,11 +43,11 @@ def compute(s: str) -> int:
             dleft = Point(sand.x - 1, sand.y + 1)
             dright = Point(sand.x + 1, sand.y + 1)
 
-            if not down in rocks:
+            if down not in rocks:
                 sand = down
-            elif not dleft in rocks:
+            elif dleft not in rocks:
                 sand = dleft
-            elif not dright in rocks:
+            elif dright not in rocks:
                 sand = dright
             else:
                 rocks.add(sand)

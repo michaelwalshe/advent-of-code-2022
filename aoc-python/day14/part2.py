@@ -48,11 +48,11 @@ def compute(s: str) -> int:
             if sand[1] + 1 == ground:
                 rocks.add(sand)
                 break
-            elif not down in rocks:
+            elif down not in rocks:
                 sand = down
-            elif not dleft in rocks:
+            elif dleft not in rocks:
                 sand = dleft
-            elif not dright in rocks:
+            elif dright not in rocks:
                 sand = dright
             else:
                 rocks.add(sand)
