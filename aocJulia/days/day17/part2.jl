@@ -9,6 +9,7 @@ struct Point
 end
 Point(p) = Point(p[1], p[2])
 Base.:+(a::Point, b::Point) = Point(a.x + b.x, a.y + b.y)
+Base.:-(a::Point, b::Point) = Point(a.x - b.x, a.y - b.y)
 Base.:(==)(a::Point, b::Point) = a.x == b.x && a.y == b.y
 Base.:isless(a::Point, b::Point) = a.y < b.y
 
@@ -52,11 +53,6 @@ end
 Base.:(==)(a::Rock, b::Rock) = a.corner == b.corner
 
 
-function top(chute)
-    return maximum(p -> p.y, collect(chute))
-end
-
-
 function move(rock::Rock, dir, chute)
     new = Rock(
         move(rock.corner, dir),
@@ -67,11 +63,7 @@ function move(rock::Rock, dir, chute)
         # Check if this would hit a rock or the sides or the floor
         any(map(p -> p.x <= 0, new.filled))
         || any(map(p -> p.x >= 8, new.filled))
-        || any(new.filled .∈ Ref(chute))
-        # (
-        #     any(map(p -> p.y <= maximum(p -> p.y, chute), new.filled))
-        #     && any(new.filled ∈ chute)
-        # )
+        || in_chute(new, chute)
     )
         return rock
     else
@@ -80,7 +72,46 @@ function move(rock::Rock, dir, chute)
 end
 
 
-function compute(s)
+function in_chute(point::Point, chute)
+    !(point.y > length(chute)) && chute[point.y][point.x] == 1
+end
+
+
+function in_chute(rock::Rock, chute)
+    return any(in_chute.(rock.filled, Ref(chute)))
+end
+
+
+function add_rock(chute, rock)
+    max_y = length(chute)
+    # For sections that will nestle into the chute, set to 1
+    for p in filter(p -> p.y <= max_y, rock.filled)
+        chute[p.y][p.x] = 1
+    end
+
+    # Find sections outside, resize y to count from 1
+    outside = [
+        p - Point(0, max_y)
+        for p in filter(p -> p.y > max_y, rock.filled)
+    ]
+    # Convert points to vector of vecs
+    # rock_mat = zeros(Int8, 7, maximum([p.y for p in outside]),)
+    if length(outside) > 0
+        rock_mat = [
+            [Int8(0) for _ in 1:7]
+            for _ in 1:maximum([p.y for p in outside])
+        ]
+        for p in outside
+            rock_mat[p.y][p.x] = 1
+        end
+        append!(chute, rock_mat)
+    end
+
+    return chute
+end
+
+
+function compute(s, maxn=1000000000000)
     # Get repeated iterators over instructions and shapes
     jets = s |> chomp |> collect |> Iterators.cycle
     shapes = Iterators.cycle([1, 2, 3, 4, 5])
@@ -88,12 +119,14 @@ function compute(s)
     (shape, shape_state) = iterate(shapes)
 
     # Initialise chute of rocks with a floor
-    chute = Set([Point(x, 0) for x in 1:7])
+    # chute = Set([Point(x, 0) for x in 1:7])
+    chute = Vector{Vector{Int8}}([[1, 1, 1, 1, 1, 1, 1]])
 
     # Start 4 above the floor
-    start_y = 4
+    start_y = 5
+    max_y = 0
     n = 0
-    while n < 2022
+    while n < maxn
         local r, newr
         # Create rock at starting point of specified shape
         r = Rock(Point(3, start_y), shape)
@@ -113,22 +146,37 @@ function compute(s)
             end
         end
         # If reached the bottom, push this rocks parts to the chute
-        push!(chute, newr.filled...)
+        chute = add_rock(chute, newr)
+        # push!(chute, newr.filled...)
+
+        # keep chute size manageable
+        # grab last 6 rows
+        # latest = chute[:, max(1, size(chute, 2) - 5):end]
+        latest = chute[max(1, length(chute) - 5):end]
+        if all(sum(latest) .!= 0)
+            # There are no paths all the way through
+            max_y += length(chute) - 6
+            chute = latest
+        end
+
+
         # Set a new max height to start
-        start_y = top(chute) + 4
+        # start_y = size(chute, 2) + 4
+        start_y = length(chute) + 4
         # Add a rock
         n += 1
         # Iterate to the next shape
         (shape, shape_state) = iterate(shapes, shape_state)
     end
 
-    return maximum(p -> p.y, collect(chute))
+    # return chute
+    return max_y + length(chute) + 4
 end
 
 
 INPUTS_S = """>>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>
 """
-EXPECTED = 3068
+EXPECTED = 1514285714288
 
 @test compute(INPUTS_S) == EXPECTED
 
