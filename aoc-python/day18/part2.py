@@ -70,7 +70,7 @@ def compute(s: str) -> int:
         # Add Counter for this pocket
         pockets.append({k: v for k, v in air.items() if k in pocket})
 
-    # Largest pocket is exterior
+    # Largest pocket is exterior? Probably
     largest_pocket = max(pockets, key = lambda d: len(d))
     return sum(v for _, v in largest_pocket.items())
 
