@@ -1,16 +1,31 @@
 * Read file into input dataset;
 
-filename inputtxt "&root./day00./input.txt";
-data input;
+filename inputtxt "&root./day05./input.txt";
+data boxes moves;
     infile inputtxt dsd;
     length x $256;
     input x;
 run;
 
 * Test data;
-data input_s;
-    infile datalines dsd;
-    input x;
+data boxes_s moves_s;
+    infile datalines missover length=reclen;
+    input x $varying1024. reclen;
+    if find(x, "move") >= 1 then do;
+        file "&root./day05./moves.txt";
+        put _infile_;
+        output moves_s;
+    end;
+
+    else do;
+        file "&root./day05./boxes.txt";
+        put _infile_;
+        output boxes_s;
+        i = _N_;
+        if find(x, "1") then call symputx("n_stacks", floor((length(x) + 1 )/ 4) + 1);
+        call symputx("n_records", _N_-2);
+    end;
+
     datalines;
     [D]    
 [N] [C]    
@@ -25,7 +40,15 @@ move 1 from 1 to 2
 run;
 
 
-%macro compute(input);
+%put &=n_records;
+
+proc sort data=boxes_s(obs=&n_records);
+    by descending i;
+run;
+
+
+
+%macro compute(boxes, moves);
 data out;
     set &input. end=eof;
     retain total;
