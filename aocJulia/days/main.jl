@@ -1,3 +1,3 @@
 using aocJulia: helpers
 
-helpers.create_day(21)
+helpers.create_day(23)
