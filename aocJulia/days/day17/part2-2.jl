@@ -76,6 +76,20 @@ function move(rock::Rock, dir, chute)
 end
 
 
+function get_chute_state(chute)
+    top_rocks = []
+    for i in 1:7
+        push!(top_rocks, maximum(p.y for p in chute if p.x == i))
+    end
+
+    miny = minimum(top_rocks)
+
+    floor_shape = [Point(p.x, p.y - miny) for p in chute if p.y >= miny]
+
+    return sort(floor_shape, by= p -> p.x)
+end
+
+
 function compute(s)
     # Get repeated iterators over instructions and shapes
     jets = s |> chomp |> collect |> Iterators.cycle
@@ -89,10 +103,38 @@ function compute(s)
     # Start 4 above the floor
     start_y = 4
     n = 0
-    while n < 2022
+    max_height = 0
+    done_at = nothing
+    done_at_val = nothing
+    done_at_delta_height = nothing
+    chute_states = Dict()
+    while n < 2022 # 1_000_000_000_000
         local r, newr
         # Create rock at starting point of specified shape
         r = Rock(Point(3, start_y), shape)
+
+        chute_state = (get_chute_state(chute), shape_state, jet_state)
+
+        if chute_state in keys(chute_states)
+            println("Here!")
+            (oldn, oldheight) = chute_states[chute_state]
+            period = n - oldn
+            # remaining = 1_000_000_000_000 - oldn
+            remaining = 2022 - oldn
+            loops = remaining ÷ period
+
+            n = remaining ÷ period
+            done_at = n + remaining % period
+            done_at_val = oldheight + loops * (max_height - oldheight)
+            done_at_delta_height = max_height
+        else
+            chute_states[chute_state] = (n, max_height)
+        end
+
+
+        if !isnothing(done_at) && n == done_at
+            return done_at_val + (max_height - done_at_delta_height)
+        end
 
         while true
             # Move rock using jet, always happens
@@ -111,7 +153,8 @@ function compute(s)
         # If reached the bottom, push this rocks parts to the chute
         push!(chute, newr.filled...)
         # Set a new max height to start
-        start_y = top(chute) + 4
+        max_height = top(chute)
+        start_y = max_height + 4
         # Add a rock
         n += 1
         # Iterate to the next shape
@@ -124,7 +167,7 @@ end
 
 INPUTS_S = """>>><<><>><<<>><>>><<<>>><<<><<<>><>><<>>
 """
-EXPECTED = 3068
+EXPECTED = 1514285714288
 
 @test compute(INPUTS_S) == EXPECTED
 

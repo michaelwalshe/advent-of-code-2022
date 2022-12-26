@@ -11,7 +11,7 @@ import urllib.parse
 import urllib.request
 from distutils.dir_util import copy_tree
 from pathlib import Path
-from typing import Generator
+from typing import Generator, Iterable, NamedTuple
 
 HERE = Path(os.path.dirname(os.path.abspath(__file__)))
 ROOT = HERE.parent
@@ -101,6 +101,22 @@ def adjacent_8(x: int, y: int) -> Generator[tuple[int, int], None, None]:
             if y_d == x_d == 0:
                 continue
             yield x + x_d, y + y_d
+
+
+
+class Bound(NamedTuple):
+    min: int
+    max: int
+
+    @property
+    def range(self) -> range:
+        return range(self.min, self.max + 1)
+
+
+
+def bounds(points: Iterable[tuple[int, ...]]) -> tuple[Bound, ...]:
+    return tuple(Bound(min(dim), max(dim)) for dim in zip(*points))
+
 
 
 def parse_coords_int(s: str) -> dict[tuple[int, int], int]:
