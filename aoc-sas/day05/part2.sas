@@ -63,7 +63,7 @@ data output;
             stacks[from] = "";
         end;
         * Add to end of new stack;
-        stacks[to] = cats(stacks[to], left(reverse(cargo)));
+        stacks[to] = cats(stacks[to], cargo);
         output;
     end;
 
@@ -83,7 +83,7 @@ run;
 
 * Test on small input;
 %compute(&root./day05/small_input.txt);
-%assert(iftrue=&result. = CMZ);
+%assert(iftrue=&result. = MCD);
 
 * Compute full result;
 %compute(&root./day05/input.txt);

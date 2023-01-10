@@ -1,0 +1,48 @@
+* Read file into input dataset;
+
+filename inputtxt "&root./day06/input.txt";
+data input;
+    infile inputtxt dsd;
+    length x $4096;
+    input x;
+run;
+
+data input_s;
+    infile datalines dsd;
+    length x $1024;
+    input x;
+    datalines;
+mjqjpqmgbljsphdztnvjfqwrcgsmlb
+;
+run;
+
+
+
+%macro compute(input);
+data output;
+    set &input.;
+    do i=1 to length(x);
+        chars = substr(x, i, 4);
+        _t = chars;
+        do n_distinct = 0 by 1 while (_t ne '');
+            _t=compress(_t,first(_t));
+        end;
+        if n_distinct = 4 then do;
+            res = i + 3;
+            output;
+            stop;
+        end;
+    end;
+run;
+
+%get(output, res, result);
+%mend compute;
+
+
+* Test on small input;
+%compute(input_s);
+%assert(iftrue=&result.=7);
+
+* Compute full result;
+%compute(input);
+%put &=result.;

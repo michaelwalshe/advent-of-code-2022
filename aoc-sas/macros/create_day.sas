@@ -21,4 +21,3 @@
         headers "Cookie"="%_get_cookie()";
     run;
 %mend create_day;
-
