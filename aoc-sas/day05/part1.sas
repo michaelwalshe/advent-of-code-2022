@@ -1,3 +1,5 @@
+%let root = C:\Users\Michael.Walshe\source\personal\advent-of-code-2022\aoc-sas;
+
 
 %macro compute(file_name);
 /*Split input data in two*/

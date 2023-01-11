@@ -1,6 +1,8 @@
+%let root = C:\Users\Michael.Walshe\source\personal\advent-of-code-2022\aoc-sas;
+
 * Read file into input dataset;
 
-filename inputtxt "&root./day00./input.txt";
+filename inputtxt "&root./day00/input.txt";
 data input;
     infile inputtxt dsd;
     length x $256;
