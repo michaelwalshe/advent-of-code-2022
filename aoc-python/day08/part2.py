@@ -44,6 +44,7 @@ def compute(s: str) -> int:
             )
             scores.append(score)
 
+    print(scores)
     return max(scores)
 
 
@@ -71,8 +72,8 @@ def main() -> int:
     args = parser.parse_args()
 
     print(compute(INPUT_S ))
-    with open(args.data_file) as f, support.timing():
-        print(compute(f.read()))
+    # with open(args.data_file) as f, support.timing():
+    #     print(compute(f.read()))
 
     return 0
 
